@@ -3,11 +3,11 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 # The gps config appropriate for this device
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
 
-$(call inherit-product-if-exists, vendor/rockchip/radxarock/radxarock-vendor.mk)
+$(call inherit-product-if-exists, vendor/rockchip/rk3188/rk3188-vendor.mk)
 
-DEVICE_PACKAGE_OVERLAYS += device/rockchip/radxarock/overlay
+DEVICE_PACKAGE_OVERLAYS += device/rockchip/rk3188/overlay
 
-LOCAL_PATH := device/rockchip/radxarock
+LOCAL_PATH := device/rockchip/rk3188
 
 KERNEL_PATH := kernel
 ifeq ($(TARGET_PREBUILT_KERNEL),)
@@ -22,17 +22,17 @@ PRODUCT_COPY_FILES += \
 
 # Recovery
 PRODUCT_PACKAGES += \
-    librecovery_ui_radxarock \
+    librecovery_ui_rk3188 \
 
 PRODUCT_COPY_FILES += \
-    device/rockchip/radxarock/init.rk30board.rc:root/init.rk30board.rc \
-    device/rockchip/radxarock/init.rk30board.usb.rc:root/init.rk30board.usb.rc \
-    device/rockchip/radxarock/init.rk30board.bootmode.emmc.rc:root/init.rk30board.bootmode.emmc.rc \
-    device/rockchip/radxarock/init.rk30board.bootmode.unknown.rc:root/init.rk30board.bootmode.unknown.rc \
-    device/rockchip/radxarock/init.connectivity.rc:root/init.connectivity.rc \
-    device/rockchip/radxarock/ueventd.rk30board.rc:root/ueventd.rk30board.rc \
-    device/rockchip/radxarock/fstab.rk30board.bootmode.emmc:root/fstab.rk30board.bootmode.emmc \
-    device/rockchip/radxarock/fstab.rk30board.bootmode.unknown:root/fstab.rk30board.bootmode.unknown \
+    device/rockchip/rk3188/init.rk30board.rc:root/init.rk30board.rc \
+    device/rockchip/rk3188/init.rk30board.usb.rc:root/init.rk30board.usb.rc \
+    device/rockchip/rk3188/init.rk30board.bootmode.emmc.rc:root/init.rk30board.bootmode.emmc.rc \
+    device/rockchip/rk3188/init.rk30board.bootmode.unknown.rc:root/init.rk30board.bootmode.unknown.rc \
+    device/rockchip/rk3188/init.connectivity.rc:root/init.connectivity.rc \
+    device/rockchip/rk3188/ueventd.rk30board.rc:root/ueventd.rk30board.rc \
+    device/rockchip/rk3188/fstab.rk30board.bootmode.emmc:root/fstab.rk30board.bootmode.emmc \
+    device/rockchip/rk3188/fstab.rk30board.bootmode.unknown:root/fstab.rk30board.bootmode.unknown \
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \
@@ -45,10 +45,10 @@ PRODUCT_PACKAGES += \
     mkyaffs2image \
 
 PRODUCT_COPY_FILES += \
-    device/rockchip/radxarock/install-recovery.sh:system/bin/install-recovery.sh \
-    device/rockchip/radxarock/audio_policy.conf:system/etc/audio_policy.conf \
-    device/rockchip/radxarock/rkxx-remotectl.kl:system/usr/keylayout/rkxx-remotectl.kl \
-    device/rockchip/radxarock/rk29-keypad.kl:system/usr/keylayout/rk29-keypad.kl \
+    device/rockchip/rk3188/install-recovery.sh:system/bin/install-recovery.sh \
+    device/rockchip/rk3188/audio_policy.conf:system/etc/audio_policy.conf \
+    device/rockchip/rk3188/rkxx-remotectl.kl:system/usr/keylayout/rkxx-remotectl.kl \
+    device/rockchip/rk3188/rk29-keypad.kl:system/usr/keylayout/rk29-keypad.kl \
 
 # HAL
 PRODUCT_PACKAGES += \
@@ -110,19 +110,17 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml \
 
 PRODUCT_COPY_FILES += \
-    device/rockchip/radxarock/media_profiles_default.xml:system/etc/media_profiles_default.xml \
-    device/rockchip/radxarock/media_codecs.xml:system/etc/media_codecs.xml \
-    device/rockchip/radxarock/performance_info.xml:system/etc/performance_info.xml \
-    device/rockchip/radxarock/packages-compat.xml:system/etc/packages-compat.xml \
-    device/rockchip/radxarock/packages-composer.xml:system/etc/packages-composer.xml \
+    device/rockchip/rk3188/media_profiles_default.xml:system/etc/media_profiles_default.xml \
+    device/rockchip/rk3188/media_codecs.xml:system/etc/media_codecs.xml \
+    device/rockchip/rk3188/performance_info.xml:system/etc/performance_info.xml \
+    device/rockchip/rk3188/packages-compat.xml:system/etc/packages-compat.xml \
+    device/rockchip/rk3188/packages-composer.xml:system/etc/packages-composer.xml \
 
 PRODUCT_COPY_FILES += \
-    device/rockchip/radxarock/bluetooth/realtek/bt/firmware/rtl8723au/rtk8723a:system/etc/firmware/rtk8723a \
-    device/rockchip/radxarock/bluetooth/realtek/bt/firmware/rtl8723au/rtk8723_bt_config:system/etc/firmware/rtk8723_bt_config \
+    device/rockchip/rk3188/bluetooth/realtek/bt/firmware/rtl8723au/rtk8723a:system/etc/firmware/rtk8723a \
+    device/rockchip/rk3188/bluetooth/realtek/bt/firmware/rtl8723au/rtk8723_bt_config:system/etc/firmware/rtk8723_bt_config \
 
 $(call inherit-product, build/target/product/full_base.mk)
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
-PRODUCT_NAME := full_radxarock
-PRODUCT_DEVICE := radxarock
 PRODUCT_CHARACTERISTICS := tablet

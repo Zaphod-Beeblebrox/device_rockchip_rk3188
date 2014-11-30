@@ -8,5 +8,5 @@ TARGET_BOARD_PLATFORM=$3
 ############################################################################################
 #rk recovery contents
 ############################################################################################
-cp -f vendor/rockchip/radxarock/proprietary/bin/sdtool $PRODUCT_OUT/recovery/root/sbin/
-cp -f vendor/rockchip/radxarock/proprietary/bin/busybox $PRODUCT_OUT/recovery/root/sbin/
+cp -f vendor/rockchip/rk3188/proprietary/bin/sdtool $PRODUCT_OUT/recovery/root/sbin/
+cp -f vendor/rockchip/rk3188/proprietary/bin/busybox $PRODUCT_OUT/recovery/root/sbin/

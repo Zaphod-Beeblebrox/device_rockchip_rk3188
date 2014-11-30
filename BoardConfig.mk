@@ -1,7 +1,7 @@
 USE_CAMERA_STUB := true
 
 # inherit from the proprietary version
--include vendor/rockchip/radxarock/BoardConfigVendor.mk
+-include vendor/rockchip/rk3188/BoardConfigVendor.mk
 
 TARGET_ARCH := arm
 TARGET_NO_BOOTLOADER := true
@@ -16,7 +16,7 @@ ARCH_ARM_HAVE_TLS_REGISTER := true
 TARGET_BOARD_PLATFORM_GPU := mali400
 TARGET_EXTRA_CFLAGS += $(call cc-option,-mtune=cortex-a9,$(call cc-option,-mtune=cortex-a8)) $(call cc-option,-mcpu=cortex-a9,$(call cc-option,-mcpu=cortex-a8))
 
-TARGET_BOOTLOADER_BOARD_NAME := radxarock
+TARGET_BOOTLOADER_BOARD_NAME := rk3188
 
 BOARD_KERNEL_CMDLINE := 
 BOARD_KERNEL_BASE := 0x60400000
@@ -37,7 +37,7 @@ TARGET_RECOVERY_UI_LIB := librecovery_ui_${TARGET_PRODUCT}
 RECOVERY_BOARD_ID := false
 RECOVERY_UPDATEIMG_RSA_CHECK := false
 
-BOARD_EGL_CFG := vendor/rockchip/radxarock/proprietary/lib/egl/egl.cfg
+BOARD_EGL_CFG := vendor/rockchip/rk3188/proprietary/lib/egl/egl.cfg
 USE_OPENGL_RENDERER := true
 
 BOARD_USES_GENERIC_AUDIO ?= true
@@ -62,5 +62,5 @@ WIFI_DRIVER_FW_PATH_AP      := ""
 BOARD_HAVE_BLUETOOTH        := true
 BLUETOOTH_USE_BPLUS         := false
 BOARD_HAVE_BLUETOOTH_BCM    := false
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/rockchip/radxarock/bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/rockchip/rk3188/bluetooth
 BLUETOOTH_HCI_USE_RTK_H5 ?= true
