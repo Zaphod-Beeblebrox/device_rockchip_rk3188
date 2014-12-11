@@ -40,27 +40,31 @@ RECOVERY_UPDATEIMG_RSA_CHECK := false
 BOARD_EGL_CFG := vendor/rockchip/rk3188/proprietary/lib/egl/egl.cfg
 USE_OPENGL_RENDERER := true
 
+#for widevine drm
+BOARD_WIDEVINE_OEMCRYPTO_LEVEL := 3
+
 BOARD_USES_GENERIC_AUDIO ?= true
 BOARD_USES_ALSA_AUDIO := true
 BUILD_WITH_ALSA_UTILS := true
 BOARD_CODEC_ITV := true
 
-BOARD_CONNECTIVITY_VENDOR := RealTek
-BOARD_CONNECTIVITY_MODULE := rtl872xU
+BOARD_CONNECTIVITY_VENDOR := Broadcom
+BOARD_CONNECTIVITY_MODULE := ap6xxx
 
-BOARD_WIFI_VENDOR := realtek
+FORCE_WIFI_WORK_AS_ANDROID4_2 := false
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 WPA_SUPPLICANT_VERSION      := VER_0_8_X
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_rtl
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_bcmdhd
 BOARD_HOSTAPD_DRIVER        := NL80211
-BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_rtl
-BOARD_WLAN_DEVICE           := realtek
-WIFI_DRIVER_FW_PATH_STA     := ""
-WIFI_DRIVER_FW_PATH_P2P     := ""
-WIFI_DRIVER_FW_PATH_AP      := ""
+BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_bcmdhd
+BOARD_WLAN_DEVICE           := bcmdhd
+WIFI_DRIVER_FW_PATH_PARAM   := "/sys/module/bcmdhd/parameters/firmware_path"
+WIFI_DRIVER_FW_PATH_STA     := "/system/etc/firmware/fw_bcm4329.bin"
+WIFI_DRIVER_FW_PATH_P2P     := "/system/etc/firmware/fw_bcm4329_p2p.bin"
+WIFI_DRIVER_FW_PATH_AP      := "/system/etc/firmware/fw_bcm4329_apsta.bin"
 
 BOARD_HAVE_BLUETOOTH        := true
 BLUETOOTH_USE_BPLUS         := false
-BOARD_HAVE_BLUETOOTH_BCM    := false
+BOARD_HAVE_BLUETOOTH_BCM    := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/rockchip/rk3188/bluetooth
 BLUETOOTH_HCI_USE_RTK_H5 ?= true

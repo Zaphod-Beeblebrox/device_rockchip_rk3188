@@ -20,6 +20,35 @@ endif
 PRODUCT_COPY_FILES += \
     $(LOCAL_KERNEL):kernel
 
+ifeq ($(strip $(BOARD_USE_LCDC_COMPOSER)), true)
+include frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk
+PRODUCT_PROPERTY_OVERRIDES += \
+    dalvik.vm.lockprof.threshold=500 \
+    dalvik.vm.dexopt-flags=m=y \
+    dalvik.vm.stack-trace-file=/data/anr/traces.txt \
+    ro.hwui.texture_cache_size=72 \
+    ro.hwui.layer_cache_size=48 \
+    ro.hwui.path_cache_size=16 \
+    ro.hwui.shape_cache_size=4 \
+    ro.hwui.gradient_cache_size=1 \
+    ro.hwui.drop_shadow_cache_size=6 \
+    ro.hwui.texture_cache_flush_rate=0.4 \
+    ro.hwui.text_small_cache_width=1024 \
+    ro.hwui.text_small_cache_height=1024 \
+    ro.hwui.text_large_cache_width=2048 \
+    ro.hwui.text_large_cache_height=1024 \
+    ro.hwui.disable_scissor_opt=true \
+    ro.rk.screenshot_enable=true   \
+    persist.sys.ui.hw=true
+
+else
+ifeq ($(strip $(BOARD_USE_LOW_MEM)), true)
+include frameworks/native/build/tablet-dalvik-heap.mk
+else
+include frameworks/native/build/tablet-7in-hdpi-1024-dalvik-heap.mk
+endif
+endif
+
 # Recovery
 PRODUCT_PACKAGES += \
     librecovery_ui_rk3188 \
@@ -100,6 +129,47 @@ PRODUCT_PACKAGES += \
 # Display
 PRODUCT_PACKAGES += \
     displayd \
+    WifiDisplay \
+
+#//*************************************************
+#//* add by bonovo zbiao for android box
+#//*************************************************
+#PRODUCT_COPY_FILES += \
+#    device/rockchip/$(TARGET_PRODUCT)/newsmy_initlogo.rle:root/initlogo.rle
+#    #device/rockchip/$(TARGET_PRODUCT)/bootanimation.zip:system/media/bootanimation.zip 
+
+PRODUCT_PACKAGES += \
+		blogd \
+		seriald \
+		BonovoAvIn \
+		libbonovoavin \
+		BonovoRadio \
+		libradio\
+		BonovoMcu\
+		libbonovomcu\
+		BonovoHandle \
+		libbonovohandle \
+		BonovoKeyEditor \
+		libbonovokeyeditor \
+		libbonovobluetooth \
+		BonovoBluetooth \
+		libbonovovin \
+		BonovoVIn \
+		libbonovobackdraft \
+		BonovoBackDraft \
+		BonovoRadar \
+		BonovoAirConditioning \
+		BonovoCarDoor \
+		BonovoSoundBalance \
+		gps.$(TARGET_BOARD_HARDWARE)
+
+#copy widevine drm lib & jar
+
+ifeq ($(BOARD_WIDEVINE_OEMCRYPTO_LEVEL),3)
+
+include vendor/widevine/widevine.mk
+
+endif
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -116,8 +186,9 @@ PRODUCT_COPY_FILES += \
     device/rockchip/rk3188/packages-composer.xml:system/etc/packages-composer.xml \
 
 PRODUCT_COPY_FILES += \
-    device/rockchip/rk3188/bluetooth/realtek/bt/firmware/rtl8723au/rtk8723a:system/etc/firmware/rtk8723a \
-    device/rockchip/rk3188/bluetooth/realtek/bt/firmware/rtl8723au/rtk8723_bt_config:system/etc/firmware/rtk8723_bt_config \
+    hardware/broadcom/wlan/bcmdhd/config/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
+    hardware/broadcom/wlan/bcmdhd/config/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
+
 
 $(call inherit-product, build/target/product/full_base.mk)
 
