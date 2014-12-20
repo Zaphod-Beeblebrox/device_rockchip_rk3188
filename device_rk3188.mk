@@ -16,6 +16,8 @@ else
 	LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
 endif
 
+PRODUCT_AAPT_CONFIG += large
+
 # Kernel
 PRODUCT_COPY_FILES += \
     $(LOCAL_KERNEL):kernel
@@ -54,6 +56,7 @@ PRODUCT_PACKAGES += \
     librecovery_ui_rk3188 \
 
 PRODUCT_COPY_FILES += \
+    device/rockchip/rk3188/init.rc:root/init.rc \
     device/rockchip/rk3188/init.rk30board.rc:root/init.rk30board.rc \
     device/rockchip/rk3188/init.rk30board.usb.rc:root/init.rk30board.usb.rc \
     device/rockchip/rk3188/init.rk30board.bootmode.emmc.rc:root/init.rk30board.bootmode.emmc.rc \
