@@ -1,4 +1,22 @@
-$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
+# Copyright (C) 2011 rockchip Limited
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# Everything in this directory will become public
+
+
+$(call inherit-product, build/target/product/full_base.mk)
 
 # The gps config appropriate for this device
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
@@ -9,47 +27,19 @@ DEVICE_PACKAGE_OVERLAYS += device/rockchip/rk3188/overlay
 
 LOCAL_PATH := device/rockchip/rk3188
 
-KERNEL_PATH := kernel
-ifeq ($(TARGET_PREBUILT_KERNEL),)
-	LOCAL_KERNEL := $(KERNEL_PATH)/arch/arm/boot/Image
-else
-	LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
-endif
+
 
 PRODUCT_AAPT_CONFIG += large
 
+########################################################
 # Kernel
+########################################################
 PRODUCT_COPY_FILES += \
-    $(LOCAL_KERNEL):kernel
+    $(TARGET_PREBUILT_KERNEL):kernel
 
-ifeq ($(strip $(BOARD_USE_LCDC_COMPOSER)), true)
-include frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk
-PRODUCT_PROPERTY_OVERRIDES += \
-    dalvik.vm.lockprof.threshold=500 \
-    dalvik.vm.dexopt-flags=m=y \
-    dalvik.vm.stack-trace-file=/data/anr/traces.txt \
-    ro.hwui.texture_cache_size=72 \
-    ro.hwui.layer_cache_size=48 \
-    ro.hwui.path_cache_size=16 \
-    ro.hwui.shape_cache_size=4 \
-    ro.hwui.gradient_cache_size=1 \
-    ro.hwui.drop_shadow_cache_size=6 \
-    ro.hwui.texture_cache_flush_rate=0.4 \
-    ro.hwui.text_small_cache_width=1024 \
-    ro.hwui.text_small_cache_height=1024 \
-    ro.hwui.text_large_cache_width=2048 \
-    ro.hwui.text_large_cache_height=1024 \
-    ro.hwui.disable_scissor_opt=true \
-    ro.rk.screenshot_enable=true   \
-    persist.sys.ui.hw=true
 
-else
-ifeq ($(strip $(BOARD_USE_LOW_MEM)), true)
-include frameworks/native/build/tablet-dalvik-heap.mk
-else
 include frameworks/native/build/tablet-7in-hdpi-1024-dalvik-heap.mk
-endif
-endif
+
 
 # Recovery
 PRODUCT_PACKAGES += \
@@ -57,6 +47,7 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     device/rockchip/rk3188/init.rc:root/init.rc \
+    device/rockchip/rk3188/init.environ.rc:root/init.environ.rc \
     device/rockchip/rk3188/init.rk30board.rc:root/init.rk30board.rc \
     device/rockchip/rk3188/init.rk30board.usb.rc:root/init.rk30board.usb.rc \
     device/rockchip/rk3188/init.rk30board.bootmode.emmc.rc:root/init.rk30board.bootmode.emmc.rc \
@@ -174,6 +165,15 @@ include vendor/widevine/widevine.mk
 
 endif
 
+########################################################
+# Google applications
+########################################################
+ifeq ($(strip $(BUILD_WITH_GOOGLE_MARKET)),true)
+PRODUCT_GOOGLE_PREBUILT_MODULES :=
+include vendor/google/gapps_kk_mini.mk
+endif
+
+
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml \
@@ -193,7 +193,74 @@ PRODUCT_COPY_FILES += \
     hardware/broadcom/wlan/bcmdhd/config/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
 
 
-$(call inherit-product, build/target/product/full_base.mk)
-
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 PRODUCT_CHARACTERISTICS := tablet
+
+########################################################
+# build with drmservice
+########################################################
+ifeq ($(strip $(BUILD_WITH_DRMSERVICE)),true)
+	PRODUCT_PACKAGES += \
+	               drmservice
+endif
+
+
+
+########################################################
+# this product has GPS or not
+########################################################
+ifeq ($(strip $(BOARD_HAS_GPS)),true)
+	PRODUCT_PROPERTY_OVERRIDES += \
+		ro.factory.hasGPS=true
+else
+	PRODUCT_PROPERTY_OVERRIDES += \
+                ro.factory.hasGPS=false
+endif
+
+########################################################
+# this product has Ethernet or not
+########################################################
+ifneq ($(strip $(BOARD_HS_ETHERNET)),true)
+    PRODUCT_PROPERTY_OVERRIDES += ro.rk.ethernet_enable=false
+endif
+
+#######################################################
+#build system support ntfs?
+########################################################
+ifeq ($(strip $(BOARD_IS_SUPPORT_NTFS)),true)
+     PRODUCT_PROPERTY_OVERRIDES += \
+         ro.factory.storage_suppntfs=true
+else
+     PRODUCT_PROPERTY_OVERRIDES += \
+         ro.factory.storage_suppntfs=false
+endif
+
+########################################################
+# build without battery
+########################################################
+ifeq ($(strip $(BUILD_WITHOUT_BATTERY)),true)
+    PRODUCT_PROPERTY_OVERRIDES += \
+        ro.factory.without_battery=true
+else
+    PRODUCT_PROPERTY_OVERRIDES += \
+        ro.factory.without_battery=false
+endif
+ 
+# NTFS support
+PRODUCT_PACKAGES += \
+    ntfs-3g
+
+PRODUCT_PACKAGES += \
+    com.android.future.usb.accessory
+
+# Copy manifest to system/
+ifeq ($(strip $(SYSTEM_WITH_MANIFEST)),true)
+    PRODUCT_COPY_FILES += \
+        manifest.xml:system/manifest.xml
+endif
+
+# Copy init.usbstorage.rc to root
+ifeq ($(strip $(BUILD_WITH_MULTI_USB_PARTITIONS)),true)
+    PRODUCT_COPY_FILES += \
+        device/rockchip/rk3188/init.usbstorage.rc:root/init.usbstorage.rc
+endif

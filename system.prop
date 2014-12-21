@@ -18,7 +18,7 @@ debug.nfc.fw_download=false
 debug.nfc.se=false
 
 #add Rockchip properties here
-ro.rksdk.version=AD3188_KK4.4.2_Amplified_0.1
+ro.rksdk.version=AD3188_KK4.4.4_AOKP_0.1
 ro.rk.screenoff_time=-1
 ro.rk.screenshot_enable=true
 ro.rk.def_brightness=200
