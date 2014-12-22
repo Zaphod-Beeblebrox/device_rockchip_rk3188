@@ -18,9 +18,6 @@
 
 $(call inherit-product, build/target/product/full_base.mk)
 
-# The gps config appropriate for this device
-$(call inherit-product, device/rk3188/gps/gps_us_supl.mk)
-
 $(call inherit-product-if-exists, vendor/rockchip/rk3188/rk3188-vendor.mk)
 
 DEVICE_PACKAGE_OVERLAYS += device/rockchip/rk3188/overlay
@@ -215,6 +212,7 @@ PRODUCT_COPY_FILES += \
 
 include device/rockchip/rk3188/bluetooth/console_start_bt/console_start_bt.mk
 
+#GPS
 
 # Charger
 PRODUCT_PACKAGES += \
