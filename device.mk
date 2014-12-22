@@ -19,7 +19,7 @@
 $(call inherit-product, build/target/product/full_base.mk)
 
 # The gps config appropriate for this device
-$(call inherit-product, device/common/gps/gps_us_supl.mk)
+$(call inherit-product, device/rk3188/gps/gps_us_supl.mk)
 
 $(call inherit-product-if-exists, vendor/rockchip/rk3188/rk3188-vendor.mk)
 
@@ -86,6 +86,12 @@ PRODUCT_PACKAGES += \
     alsa.default \
     acoustics.default \
 
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/asound_itv.conf:system/etc/asound.conf
+
+$(call inherit-product-if-exists, $(LOCAL_PATH)/system/alsa-lib/copy.mk)
+$(call inherit-product-if-exists, $(LOCAL_PATH)/system/alsa-utils/copy.mk)
+
 # Media proprietary libraries
 PRODUCT_PACKAGES += \
     libvpu \
@@ -109,11 +115,106 @@ PRODUCT_PACKAGES += \
     libjpeghwdec \
     librkswscale \
 
+# GPU
+PRODUCT_PROPERTY_OVERRIDES += ro.sf.lcdc_composer=0
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/asound_itv.conf:system/etc/asound.conf
+    device/rockchip/rk3188/gpu/libmali_smp/libMali.so:system/lib/libMali.so \
+    device/rockchip/rk3188/gpu/libmali_smp/libMali.so:obj/lib/libMali.so \
+    device/rockchip/rk3188/gpu/libmali_smp/libUMP.so:system/lib/libUMP.so \
+    device/rockchip/rk3188/gpu/libmali_smp/libUMP.so:obj/lib/libUMP.so \
+    device/rockchip/rk3188/gpu/libmali_smp/libEGL_mali.so:system/lib/egl/libEGL_mali.so \
+    device/rockchip/rk3188/gpu/libmali_smp/libGLESv1_CM_mali.so:system/lib/egl/libGLESv1_CM_mali.so \
+    device/rockchip/rk3188/gpu/libmali_smp/libGLESv2_mali.so:system/lib/egl/libGLESv2_mali.so \
+    device/rockchip/rk3188/gpu/libmali_smp/osmem/mali.ko.3.0.36+:system/lib/modules/mali.ko.3.0.36+ \
+    device/rockchip/rk3188/gpu/libmali_smp/osmem/mali.ko:system/lib/modules/mali.ko \
+    device/rockchip/rk3188/gpu/libmali_smp/osmem/ump.ko.3.0.36+:system/lib/modules/ump.ko.3.0.36+ \
+    device/rockchip/rk3188/gpu/libmali_smp/osmem/ump.ko:system/lib/modules/ump.ko \
+    device/rockchip/rk3188/gpu/gpu_performance/performance_info.xml:system/etc/performance_info.xml \
+    device/rockchip/rk3188/gpu/gpu_performance/packages-compat.xml:system/etc/packages-compat.xml \
+    device/rockchip/rk3188/gpu/gpu_performance/packages-composer.xml:system/etc/packages-composer.xml \
+    device/rockchip/rk3188/gpu/gpu_performance/performance:system/bin/performance \
+    device/rockchip/rk3188/gpu/gpu_performance/libperformance_runtime.so:system/lib/libperformance_runtime.so \
+    device/rockchip/rk3188/gpu/gpu_performance/gpu.$(TARGET_BOARD_HARDWARE).so:system/lib/hw/gpu.$(TARGET_BOARD_HARDWARE).so
 
-$(call inherit-product-if-exists, $(LOCAL_PATH)/system/alsa-lib/copy.mk)
-$(call inherit-product-if-exists, $(LOCAL_PATH)/system/alsa-utils/copy.mk)
+#VPU
+CUR_PATH := device/rockchip/rk3188/vpu
+sf_lib_files := $(shell ls $(CUR_PATH)/lib | grep .so)
+PRODUCT_COPY_FILES += \
+       $(foreach file, $(sf_lib_files), $(CUR_PATH)/lib/$(file):system/lib/$(file))
+
+PRODUCT_COPY_FILES += \
+       $(foreach file, $(sf_lib_files), $(CUR_PATH)/lib/$(file):obj/lib/$(file))
+
+PRODUCT_COPY_FILES += \
+    device/rockchip/rk3188/vpu/lib/media_codecs.xml:system/etc/media_codecs.xml \
+    device/rockchip/rk3188/vpu/lib/modules_smp/vpu_service.ko.3.0.36+:system/lib/modules/vpu_service.ko.3.0.36+ \
+    device/rockchip/rk3188/vpu/lib/modules_smp/vpu_service.ko:system/lib/modules/vpu_service.ko\
+    device/rockchip/rk3188/vpu/lib/modules_smp/rk30_mirroring.ko.3.0.8+:system/lib/modules/rk30_mirroring.ko.3.0.8+\
+    device/rockchip/rk3188/vpu/lib/modules_smp/rk30_mirroring.ko.3.0.36+:system/lib/modules/rk30_mirroring.ko.3.0.36+ 
+
+PRODUCT_COPY_FILES += \
+    device/rockchip/rk3188/vpu/lib/wfd:system/bin/wfd
+
+PRODUCT_PACKAGES += \
+	libyuvtorgb     
+
+#WiFI
+PRODUCT_COPY_FILES += \
+	device/rockchip/rk3188/wifi/lib/modules_smp/wlan.ko:system/lib/modules/wlan.ko \
+	device/rockchip/rk3188/wifi/lib/modules_smp/rkwifi.ko:system/lib/modules/rkwifi.ko \
+	device/rockchip/rk3188/wifi/lib/modules_smp/rkwifi.oob.ko:system/lib/modules/rkwifi.oob.ko \
+	device/rockchip/rk3188/wifi/lib/modules_smp/8188eu.ko:system/lib/modules/8188eu.ko \
+	device/rockchip/rk3188/wifi/lib/modules_smp/8192cu.ko:system/lib/modules/8192cu.ko \
+	device/rockchip/rk3188/wifi/lib/modules_smp/mt5931.ko:system/lib/modules/mt5931.ko \
+        device/rockchip/rk3188/wifi/lib/modules_smp/8723as.ko:system/lib/modules/8723as.ko \
+	device/rockchip/rk3188/wifi/lib/modules_smp/8723au.ko:system/lib/modules/8723au.ko \
+	device/rockchip/rk3188/wifi/lib/modules_smp/8189es.ko:system/lib/modules/8189es.ko \
+	device/rockchip/rk3188/wifi/lib/modules_smp/mt7601sta.ko:system/lib/modules/mt7601sta.ko \
+	device/rockchip/rk3188/wifi/lib/modules_smp/mt7601ap.ko:system/lib/modules/mt7601ap.ko \
+	device/rockchip/rk3188/wifi/lib/modules_smp/mtprealloc7601Usta.ko:system/lib/modules/mtprealloc7601Usta.ko \
+	device/rockchip/rk3188/wifi/lib/modules_smp/esp8089.ko:system/lib/modules/esp8089.ko \
+        device/rockchip/rk3188/wifi/lib/init_data.conf:system/lib/modules/init_data.conf \
+	device/rockchip/rk3188/wifi/lib/esp_init_data.bin:system/lib/modules/esp_init_data.bin \
+	device/rockchip/rk3188/wifi/lib/esp_supplicant:system/bin/esp_supplicant \
+	device/rockchip/rk3188/wifi/lib/esp_hostapd:system/bin/esp_hostapd \
+	device/rockchip/rk3188/wifi/lib/bcm_supplicant:system/bin/bcm_supplicant \
+	device/rockchip/rk3188/wifi/lib/rtl_supplicant:system/bin/rtl_supplicant \
+	device/rockchip/rk3188/wifi/lib/rtl_hostapd:system/bin/rtl_hostapd \
+        device/rockchip/rk3188/wifi/mt5931/wpa_supplicant/wpa_supplicant:system/bin/wpa_supplicant_mt5931 \
+        device/rockchip/rk3188/wifi/mt5931/wpa_supplicant/p2p_supplicant.conf:system/etc/wifi/p2p_supplicant_mt5931.conf \
+        device/rockchip/rk3188/wifi/mt5931/wpa_supplicant/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant_mt5931.conf
+
+#Nand
+ifeq ($(strip $(NAND_UPDATE)),true)
+   PRODUCT_COPY_FILES += \
+	device/rockchip/rk3188/nand/lib/update/rk30xxnand_ko.ko.3.0.36+:root/rk30xxnand_ko.ko.3.0.36+ \
+	device/rockchip/rk3188/nand/lib/update/rk30xxnand_ko.ko.3.0.8+:root/rk30xxnand_ko.ko.3.0.8+ \
+        device/rockchip/rk3188/nand/lib/drmboot.ko:root/drmboot.ko
+else
+   PRODUCT_COPY_FILES += \
+        device/rockchip/rk3188/nand/lib/rk30xxnand_ko.ko.3.0.36+:root/rk30xxnand_ko.ko.3.0.36+ \
+	device/rockchip/rk3188/nand/lib/rk30xxnand_ko.ko.3.0.8+:root/rk30xxnand_ko.ko.3.0.8+ \
+	device/rockchip/rk3188/nand/lib/drmboot.ko:root/drmboot.ko
+endif
+
+#IPP
+PRODUCT_COPY_FILES += \
+	device/rockchip/rk3188/ipp/lib/rk29-ipp.ko.3.0.36+:system/lib/modules/rk29-ipp.ko.3.0.36+ \
+	device/rockchip/rk3188/ipp/lib/rk29-ipp.ko:system/lib/modules/rk29-ipp.ko
+
+#Ion
+PRODUCT_COPY_FILES += \
+	device/rockchip/rk3188/ion/lib/libion.so:system/lib/libion.so \
+	device/rockchip/rk3188/ion/lib/libion.so:obj/lib/libion.so 
+
+#Bluetooth
+CUR_PATH := device/rockchip/rk3188/bluetooth
+BT_FIRMWARE_FILES := $(shell ls $(CUR_PATH)/lib/firmware)
+PRODUCT_COPY_FILES += \
+    $(foreach file, $(BT_FIRMWARE_FILES), $(CUR_PATH)/lib/firmware/$(file):system/vendor/firmware/$(file))
+
+include device/rockchip/rk3188/bluetooth/console_start_bt/console_start_bt.mk
+
 
 # Charger
 PRODUCT_PACKAGES += \
@@ -156,6 +257,12 @@ PRODUCT_PACKAGES += \
 		BonovoCarDoor \
 		BonovoSoundBalance \
 		gps.$(TARGET_BOARD_HARDWARE)
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.sys.strictmode.visual=false \
+
+    dalvik.vm.jniopts=warnonly
+PRODUCT_TAGS += dalvik.gc.type-precise
 
 #copy widevine drm lib & jar
 
