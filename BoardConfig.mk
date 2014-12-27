@@ -3,7 +3,6 @@
 # Product-specific compile-time definitions.
 #
 
-
 TARGET_PREBUILT_KERNEL := kernel/arch/arm/boot/Image
 TARGET_BOARD_PLATFORM := rk3188
 TARGET_ARCH := arm
@@ -43,8 +42,8 @@ USE_OPENGL_RENDERER := true
 
 BOARD_USES_GENERIC_AUDIO := true
 BOARD_USES_ALSA_AUDIO := true
-BUILD_WITH_ALSA_UTILS := true
-BOARD_CODEC_ITV := true
+BUILD_WITH_ALSA_UTILS := false
+BOARD_CODEC_ITV := false
 
 BOARD_CONNECTIVITY_VENDOR := Broadcom
 BOARD_CONNECTIVITY_MODULE := ap6xxx

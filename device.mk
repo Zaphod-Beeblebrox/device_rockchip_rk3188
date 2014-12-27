@@ -40,7 +40,7 @@ include frameworks/native/build/tablet-7in-hdpi-1024-dalvik-heap.mk
 
 # Recovery
 PRODUCT_PACKAGES += \
-    librecovery_ui_rk3188 \
+    librecovery_ui_rk3188 
 
 PRODUCT_COPY_FILES += \
     device/rockchip/rk3188/init.rc:root/init.rc \
@@ -52,7 +52,7 @@ PRODUCT_COPY_FILES += \
     device/rockchip/rk3188/init.connectivity.rc:root/init.connectivity.rc \
     device/rockchip/rk3188/ueventd.rk30board.rc:root/ueventd.rk30board.rc \
     device/rockchip/rk3188/fstab.rk30board.bootmode.emmc:root/fstab.rk30board.bootmode.emmc \
-    device/rockchip/rk3188/fstab.rk30board.bootmode.unknown:root/fstab.rk30board.bootmode.unknown \
+    device/rockchip/rk3188/fstab.rk30board.bootmode.unknown:root/fstab.rk30board.bootmode.unknown
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \
@@ -62,32 +62,45 @@ PRODUCT_PACKAGES += \
     resize2fs \
     mkdosfs \
     genext2fs \
-    mkyaffs2image \
+    mkyaffs2image
 
 PRODUCT_COPY_FILES += \
     device/rockchip/rk3188/install-recovery.sh:system/bin/install-recovery.sh \
     device/rockchip/rk3188/audio_policy.conf:system/etc/audio_policy.conf \
     device/rockchip/rk3188/rkxx-remotectl.kl:system/usr/keylayout/rkxx-remotectl.kl \
     device/rockchip/rk3188/rk29-keypad.kl:system/usr/keylayout/rk29-keypad.kl \
+    device/rockchip/rk3188/bin/io:system/xbin/io \
+    device/rockchip/rk3188/bin/mkdosfs:root/sbin/mkdosfs \
+    device/rockchip/rk3188/bin/busybox:/system/bin/busybox
 
 # HAL
 PRODUCT_PACKAGES += \
-    hwcomposer.rk30board \
-    power.rk3188 \
+    power.$(TARGET_BOARD_PLATFORM) \
+    sensors.$(TARGET_BOARD_HARDWARE) \
+    gralloc.$(TARGET_BOARD_HARDWARE) \
+    hwcomposer.$(TARGET_BOARD_HARDWARE) \
+    lights.$(TARGET_BOARD_HARDWARE) \
+    camera.$(TARGET_BOARD_HARDWARE) \
+    Camera \
+    akmd 
 
 # Audio
 PRODUCT_PACKAGES += \
-    audio.a2dp.default \
-    audio.r_submix.default \
+    audio_policy.$(TARGET_BOARD_HARDWARE) \
+    audio.primary.$(TARGET_BOARD_HARDWARE) \
+    audio.alsa_usb.$(TARGET_BOARD_HARDWARE) \
+    audio.a2dp.default\
+    audio.r_submix.default\
     audio.usb.default \
     alsa.default \
+    alsa.audio.primary.$(TARGET_BOARD_HARDWARE)\
+    alsa.audio_policy.$(TARGET_BOARD_HARDWARE) \
     acoustics.default \
+    libtinyalsa \
+    libasound 
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/asound_itv.conf:system/etc/asound.conf
-
-$(call inherit-product-if-exists, $(LOCAL_PATH)/system/alsa-lib/copy.mk)
-$(call inherit-product-if-exists, $(LOCAL_PATH)/system/alsa-utils/copy.mk)
 
 # Media proprietary libraries
 PRODUCT_PACKAGES += \
@@ -110,7 +123,7 @@ PRODUCT_PACKAGES += \
     libstagefright \
     libjpeghwenc \
     libjpeghwdec \
-    librkswscale \
+    librkswscale 
 
 # GPU
 PRODUCT_PROPERTY_OVERRIDES += ro.sf.lcdc_composer=0
@@ -217,12 +230,12 @@ include device/rockchip/rk3188/bluetooth/console_start_bt/console_start_bt.mk
 # Charger
 PRODUCT_PACKAGES += \
     charger \
-    charger_res_images \
+    charger_res_images 
 
 # Display
 PRODUCT_PACKAGES += \
     displayd \
-    WifiDisplay \
+    WifiDisplay 
 
 #//*************************************************
 #//* add by bonovo zbiao for android box
@@ -284,18 +297,18 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
-    frameworks/native/data/etc/android.hardware.bluetooth.xml:system/etc/permissions/android.hardware.bluetooth.xml \
+    frameworks/native/data/etc/android.hardware.bluetooth.xml:system/etc/permissions/android.hardware.bluetooth.xml
 
 PRODUCT_COPY_FILES += \
     device/rockchip/rk3188/media_profiles_default.xml:system/etc/media_profiles_default.xml \
     device/rockchip/rk3188/media_codecs.xml:system/etc/media_codecs.xml \
     device/rockchip/rk3188/performance_info.xml:system/etc/performance_info.xml \
     device/rockchip/rk3188/packages-compat.xml:system/etc/packages-compat.xml \
-    device/rockchip/rk3188/packages-composer.xml:system/etc/packages-composer.xml \
+    device/rockchip/rk3188/packages-composer.xml:system/etc/packages-composer.xml
 
 PRODUCT_COPY_FILES += \
     hardware/broadcom/wlan/bcmdhd/config/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
-    hardware/broadcom/wlan/bcmdhd/config/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
+    hardware/broadcom/wlan/bcmdhd/config/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf
 
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
