@@ -15,10 +15,12 @@
 
 # Everything in this directory will become public
 
+$(shell python device/rockchip/rk3188/auto_generator.py $(TARGET_PRODUCT) preinstall)
+$(shell python device/rockchip/rk3188/auto_generator.py $(TARGET_PRODUCT) preinstall_del)
+-include device/rockchip/$(TARGET_PRODUCT)/preinstall/preinstall.mk
+-include device/rockchip/$(TARGET_PRODUCT)/preinstall_del/preinstall.mk
 
 $(call inherit-product, build/target/product/full_base.mk)
-
-$(call inherit-product-if-exists, vendor/rockchip/rk3188/rk3188-vendor.mk)
 
 DEVICE_PACKAGE_OVERLAYS += device/rockchip/rk3188/overlay
 
@@ -68,10 +70,7 @@ PRODUCT_COPY_FILES += \
     device/rockchip/rk3188/install-recovery.sh:system/bin/install-recovery.sh \
     device/rockchip/rk3188/audio_policy.conf:system/etc/audio_policy.conf \
     device/rockchip/rk3188/rkxx-remotectl.kl:system/usr/keylayout/rkxx-remotectl.kl \
-    device/rockchip/rk3188/rk29-keypad.kl:system/usr/keylayout/rk29-keypad.kl \
-    device/rockchip/rk3188/bin/io:system/xbin/io \
-    device/rockchip/rk3188/bin/mkdosfs:root/sbin/mkdosfs \
-    device/rockchip/rk3188/bin/busybox:/system/bin/busybox
+    device/rockchip/rk3188/rk29-keypad.kl:system/usr/keylayout/rk29-keypad.kl
 
 # HAL
 PRODUCT_PACKAGES += \
@@ -99,143 +98,71 @@ PRODUCT_PACKAGES += \
     libtinyalsa \
     libasound 
 
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/asound_itv.conf:system/etc/asound.conf
-
-# Media proprietary libraries
+# For audio-recoard 
 PRODUCT_PACKAGES += \
-    libvpu \
-    librk_on2 \
-    libjesancache \
-    librkwmapro \
-    libapedec \
-    libffmpegvpu \
-    libRKBluray \
-    libffmpeg_on2 \
-    libffmpeg \
-    libhevcdec \
-    libOMX_Core \
-    libomxvpu_dec \
-    libomxvpu_enc \
-    libRkOMX_Resourcemanager \
-    libstagefright_hdcp \
-    libstagefrighthw \
-    libstagefright \
-    libjpeghwenc \
-    libjpeghwdec \
-    librkswscale 
+    libsrec_jni
+
+# For tts test
+PRODUCT_PACKAGES += \
+    libwebrtc_audio_coding
 
 # GPU
-PRODUCT_PROPERTY_OVERRIDES += ro.sf.lcdc_composer=0
-PRODUCT_COPY_FILES += \
-    device/rockchip/rk3188/gpu/libmali_smp/libMali.so:system/lib/libMali.so \
-    device/rockchip/rk3188/gpu/libmali_smp/libMali.so:obj/lib/libMali.so \
-    device/rockchip/rk3188/gpu/libmali_smp/libUMP.so:system/lib/libUMP.so \
-    device/rockchip/rk3188/gpu/libmali_smp/libUMP.so:obj/lib/libUMP.so \
-    device/rockchip/rk3188/gpu/libmali_smp/libEGL_mali.so:system/lib/egl/libEGL_mali.so \
-    device/rockchip/rk3188/gpu/libmali_smp/libGLESv1_CM_mali.so:system/lib/egl/libGLESv1_CM_mali.so \
-    device/rockchip/rk3188/gpu/libmali_smp/libGLESv2_mali.so:system/lib/egl/libGLESv2_mali.so \
-    device/rockchip/rk3188/gpu/libmali_smp/osmem/mali.ko.3.0.36+:system/lib/modules/mali.ko.3.0.36+ \
-    device/rockchip/rk3188/gpu/libmali_smp/osmem/mali.ko:system/lib/modules/mali.ko \
-    device/rockchip/rk3188/gpu/libmali_smp/osmem/ump.ko.3.0.36+:system/lib/modules/ump.ko.3.0.36+ \
-    device/rockchip/rk3188/gpu/libmali_smp/osmem/ump.ko:system/lib/modules/ump.ko \
-    device/rockchip/rk3188/gpu/gpu_performance/performance_info.xml:system/etc/performance_info.xml \
-    device/rockchip/rk3188/gpu/gpu_performance/packages-compat.xml:system/etc/packages-compat.xml \
-    device/rockchip/rk3188/gpu/gpu_performance/packages-composer.xml:system/etc/packages-composer.xml \
-    device/rockchip/rk3188/gpu/gpu_performance/performance:system/bin/performance \
-    device/rockchip/rk3188/gpu/gpu_performance/libperformance_runtime.so:system/lib/libperformance_runtime.so \
-    device/rockchip/rk3188/gpu/gpu_performance/gpu.$(TARGET_BOARD_HARDWARE).so:system/lib/hw/gpu.$(TARGET_BOARD_HARDWARE).so
+include device/rockchip/rk3188/gpu/rk30xx_gpu.mk
 
 #VPU
-CUR_PATH := device/rockchip/rk3188/vpu
-sf_lib_files := $(shell ls $(CUR_PATH)/lib | grep .so)
-PRODUCT_COPY_FILES += \
-       $(foreach file, $(sf_lib_files), $(CUR_PATH)/lib/$(file):system/lib/$(file))
-
-PRODUCT_COPY_FILES += \
-       $(foreach file, $(sf_lib_files), $(CUR_PATH)/lib/$(file):obj/lib/$(file))
-
-PRODUCT_COPY_FILES += \
-    device/rockchip/rk3188/vpu/lib/media_codecs.xml:system/etc/media_codecs.xml \
-    device/rockchip/rk3188/vpu/lib/modules_smp/vpu_service.ko.3.0.36+:system/lib/modules/vpu_service.ko.3.0.36+ \
-    device/rockchip/rk3188/vpu/lib/modules_smp/vpu_service.ko:system/lib/modules/vpu_service.ko\
-    device/rockchip/rk3188/vpu/lib/modules_smp/rk30_mirroring.ko.3.0.8+:system/lib/modules/rk30_mirroring.ko.3.0.8+\
-    device/rockchip/rk3188/vpu/lib/modules_smp/rk30_mirroring.ko.3.0.36+:system/lib/modules/rk30_mirroring.ko.3.0.36+ 
-
-PRODUCT_COPY_FILES += \
-    device/rockchip/rk3188/vpu/lib/wfd:system/bin/wfd
-
-PRODUCT_PACKAGES += \
-	libyuvtorgb     
+include device/rockchip/rk3188/vpu/rk30_vpu.mk
 
 #WiFI
-PRODUCT_COPY_FILES += \
-	device/rockchip/rk3188/wifi/lib/modules_smp/wlan.ko:system/lib/modules/wlan.ko \
-	device/rockchip/rk3188/wifi/lib/modules_smp/rkwifi.ko:system/lib/modules/rkwifi.ko \
-	device/rockchip/rk3188/wifi/lib/modules_smp/rkwifi.oob.ko:system/lib/modules/rkwifi.oob.ko \
-	device/rockchip/rk3188/wifi/lib/modules_smp/8188eu.ko:system/lib/modules/8188eu.ko \
-	device/rockchip/rk3188/wifi/lib/modules_smp/8192cu.ko:system/lib/modules/8192cu.ko \
-	device/rockchip/rk3188/wifi/lib/modules_smp/mt5931.ko:system/lib/modules/mt5931.ko \
-        device/rockchip/rk3188/wifi/lib/modules_smp/8723as.ko:system/lib/modules/8723as.ko \
-	device/rockchip/rk3188/wifi/lib/modules_smp/8723au.ko:system/lib/modules/8723au.ko \
-	device/rockchip/rk3188/wifi/lib/modules_smp/8189es.ko:system/lib/modules/8189es.ko \
-	device/rockchip/rk3188/wifi/lib/modules_smp/mt7601sta.ko:system/lib/modules/mt7601sta.ko \
-	device/rockchip/rk3188/wifi/lib/modules_smp/mt7601ap.ko:system/lib/modules/mt7601ap.ko \
-	device/rockchip/rk3188/wifi/lib/modules_smp/mtprealloc7601Usta.ko:system/lib/modules/mtprealloc7601Usta.ko \
-	device/rockchip/rk3188/wifi/lib/modules_smp/esp8089.ko:system/lib/modules/esp8089.ko \
-        device/rockchip/rk3188/wifi/lib/init_data.conf:system/lib/modules/init_data.conf \
-	device/rockchip/rk3188/wifi/lib/esp_init_data.bin:system/lib/modules/esp_init_data.bin \
-	device/rockchip/rk3188/wifi/lib/esp_supplicant:system/bin/esp_supplicant \
-	device/rockchip/rk3188/wifi/lib/esp_hostapd:system/bin/esp_hostapd \
-	device/rockchip/rk3188/wifi/lib/bcm_supplicant:system/bin/bcm_supplicant \
-	device/rockchip/rk3188/wifi/lib/rtl_supplicant:system/bin/rtl_supplicant \
-	device/rockchip/rk3188/wifi/lib/rtl_hostapd:system/bin/rtl_hostapd \
-        device/rockchip/rk3188/wifi/mt5931/wpa_supplicant/wpa_supplicant:system/bin/wpa_supplicant_mt5931 \
-        device/rockchip/rk3188/wifi/mt5931/wpa_supplicant/p2p_supplicant.conf:system/etc/wifi/p2p_supplicant_mt5931.conf \
-        device/rockchip/rk3188/wifi/mt5931/wpa_supplicant/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant_mt5931.conf
+include device/rockchip/rk3188/wifi/rk30_wifi.mk
 
 #Nand
-ifeq ($(strip $(NAND_UPDATE)),true)
-   PRODUCT_COPY_FILES += \
-	device/rockchip/rk3188/nand/lib/update/rk30xxnand_ko.ko.3.0.36+:root/rk30xxnand_ko.ko.3.0.36+ \
-	device/rockchip/rk3188/nand/lib/update/rk30xxnand_ko.ko.3.0.8+:root/rk30xxnand_ko.ko.3.0.8+ \
-        device/rockchip/rk3188/nand/lib/drmboot.ko:root/drmboot.ko
-else
-   PRODUCT_COPY_FILES += \
-        device/rockchip/rk3188/nand/lib/rk30xxnand_ko.ko.3.0.36+:root/rk30xxnand_ko.ko.3.0.36+ \
-	device/rockchip/rk3188/nand/lib/rk30xxnand_ko.ko.3.0.8+:root/rk30xxnand_ko.ko.3.0.8+ \
-	device/rockchip/rk3188/nand/lib/drmboot.ko:root/drmboot.ko
-endif
+include device/rockchip/rk3188/nand/rk30_nand.mk
 
 #IPP
-PRODUCT_COPY_FILES += \
-	device/rockchip/rk3188/ipp/lib/rk29-ipp.ko.3.0.36+:system/lib/modules/rk29-ipp.ko.3.0.36+ \
-	device/rockchip/rk3188/ipp/lib/rk29-ipp.ko:system/lib/modules/rk29-ipp.ko
+include device/rockchip/rk3188/ipp/rk29_ipp.mk
 
 #Ion
-PRODUCT_COPY_FILES += \
-	device/rockchip/rk3188/ion/lib/libion.so:system/lib/libion.so \
-	device/rockchip/rk3188/ion/lib/libion.so:obj/lib/libion.so 
+include device/rockchip/rk3188/ion/rk30_ion.mk
 
 #Bluetooth
-CUR_PATH := device/rockchip/rk3188/bluetooth
-BT_FIRMWARE_FILES := $(shell ls $(CUR_PATH)/lib/firmware)
-PRODUCT_COPY_FILES += \
-    $(foreach file, $(BT_FIRMWARE_FILES), $(CUR_PATH)/lib/firmware/$(file):system/vendor/firmware/$(file))
-
-include device/rockchip/rk3188/bluetooth/console_start_bt/console_start_bt.mk
+ifeq ($(strip $(BOARD_HAVE_BLUETOOTH)),true)
+    include device/rockchip/rk3188/bluetooth/rk30_bt.mk
+endif
 
 #GPS
+include device/rockchip/rk3188/gps/rk30_gps.mk
+
+#BIN
+include device/rockchip/rk3188/bin/rk30_bin.mk
 
 # Charger
 PRODUCT_PACKAGES += \
     charger \
     charger_res_images 
 
-# Display
-PRODUCT_PACKAGES += \
-    displayd \
-    WifiDisplay 
+PRODUCT_PACKAGES += WifiDisplay
+PRODUCT_PACKAGES += Email
+PRODUCT_PACKAGES += StressTest
+
+# uncomment the line bellow to enable phone functions
+include device/rockchip/rk3188/phone/rk30_phone.mk
+
+include device/rockchip/rk3188/features/rk-core.mk
+include device/rockchip/rk3188/features/rk-camera.mk
+include device/rockchip/rk3188/features/rk-camera-front.mk
+include device/rockchip/rk3188/features/rk-gms.mk
+
+
+#whtest for bin
+PRODUCT_COPY_FILES += \
+    device/rockchip/rk3188/whtest.sh:system/bin/whtest.sh
+
+# for preinstall
+PRODUCT_COPY_FILES += \
+    device/rockchip/rk3188/preinstall_cleanup.sh:system/bin/preinstall_cleanup.sh
+    
+# for data clone
+include device/rockchip/rk3188/data_clone/packdata.mk
 
 #//*************************************************
 #//* add by bonovo zbiao for android box
@@ -271,8 +198,8 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.strictmode.visual=false \
-
     dalvik.vm.jniopts=warnonly
+
 PRODUCT_TAGS += dalvik.gc.type-precise
 
 #copy widevine drm lib & jar
@@ -301,10 +228,7 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     device/rockchip/rk3188/media_profiles_default.xml:system/etc/media_profiles_default.xml \
-    device/rockchip/rk3188/media_codecs.xml:system/etc/media_codecs.xml \
-    device/rockchip/rk3188/performance_info.xml:system/etc/performance_info.xml \
-    device/rockchip/rk3188/packages-compat.xml:system/etc/packages-compat.xml \
-    device/rockchip/rk3188/packages-composer.xml:system/etc/packages-composer.xml
+    device/rockchip/rk3188/alarm_filter.xml:system/etc/alarm_filter.xml 
 
 PRODUCT_COPY_FILES += \
     hardware/broadcom/wlan/bcmdhd/config/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
