@@ -2,7 +2,7 @@ ifeq ($(strip $(TARGET_BOARD_PLATFORM_GPU)), mali400)
 LOCAL_PATH := $(call my-dir)
 
 ifeq ($(strip $(TARGET_BOARD_PLATFORM)),rk3188)
-ifeq ($(strip $(TARGET_PRODUCT)),rk3188)
+ifeq ($(strip $(TARGET_DEVICE)),rk3188)
 
 ifeq ($(strip $(BOARD_USE_LCDC_COMPOSER)),true)
 

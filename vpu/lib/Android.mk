@@ -55,3 +55,8 @@ LOCAL_PREBUILT_LIBS := librkffplayer.so
 LOCAL_MODULE_TAGS := optional
 include $(BUILD_MULTI_PREBUILT)
 
+include $(CLEAR_VARS)
+LOCAL_PREBUILT_LIBS := libstagefright.so               
+LOCAL_MODULE_TAGS := optional
+include $(BUILD_MULTI_PREBUILT)
+

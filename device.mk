@@ -15,10 +15,10 @@
 
 # Everything in this directory will become public
 
-$(shell python device/rockchip/rk3188/auto_generator.py $(TARGET_PRODUCT) preinstall)
-$(shell python device/rockchip/rk3188/auto_generator.py $(TARGET_PRODUCT) preinstall_del)
--include device/rockchip/$(TARGET_PRODUCT)/preinstall/preinstall.mk
--include device/rockchip/$(TARGET_PRODUCT)/preinstall_del/preinstall.mk
+$(shell python device/rockchip/rk3188/auto_generator.py $(TARGET_DEVICE) preinstall)
+$(shell python device/rockchip/rk3188/auto_generator.py $(TARGET_DEVICE) preinstall_del)
+-include device/rockchip/$(TARGET_DEVICE)/preinstall/preinstall.mk
+-include device/rockchip/$(TARGET_DEVICE)/preinstall_del/preinstall.mk
 
 $(call inherit-product, build/target/product/full_base.mk)
 
@@ -79,8 +79,8 @@ PRODUCT_PACKAGES += \
     gralloc.$(TARGET_BOARD_HARDWARE) \
     hwcomposer.$(TARGET_BOARD_HARDWARE) \
     lights.$(TARGET_BOARD_HARDWARE) \
-    camera.$(TARGET_BOARD_HARDWARE) \
-    Camera \
+#    camera.$(TARGET_BOARD_HARDWARE) \
+#    Camera \
     akmd 
 
 # Audio
@@ -168,8 +168,8 @@ include device/rockchip/rk3188/data_clone/packdata.mk
 #//* add by bonovo zbiao for android box
 #//*************************************************
 #PRODUCT_COPY_FILES += \
-#    device/rockchip/$(TARGET_PRODUCT)/newsmy_initlogo.rle:root/initlogo.rle
-#    #device/rockchip/$(TARGET_PRODUCT)/bootanimation.zip:system/media/bootanimation.zip 
+#    device/rockchip/$(TARGET_DEVICE)/newsmy_initlogo.rle:root/initlogo.rle
+#    #device/rockchip/$(TARGET_DEVICE)/bootanimation.zip:system/media/bootanimation.zip 
 
 PRODUCT_PACKAGES += \
 		blogd \
