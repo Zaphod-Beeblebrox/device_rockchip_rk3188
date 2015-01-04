@@ -67,9 +67,7 @@ PRODUCT_PACKAGES += \
     mkyaffs2image
 
 PRODUCT_COPY_FILES += \
-    device/rockchip/rk3188/install-recovery.sh:system/bin/install-recovery.sh \
     device/rockchip/rk3188/audio_policy.conf:system/etc/audio_policy.conf \
-    device/rockchip/rk3188/rkxx-remotectl.kl:system/usr/keylayout/rkxx-remotectl.kl \
     device/rockchip/rk3188/rk29-keypad.kl:system/usr/keylayout/rk29-keypad.kl
 
 # HAL
