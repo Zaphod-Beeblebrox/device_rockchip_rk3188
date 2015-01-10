@@ -162,6 +162,10 @@ PRODUCT_COPY_FILES += \
 # for data clone
 include device/rockchip/rk3188/data_clone/packdata.mk
 
+#getbootmode.sh for stresstest
+PRODUCT_COPY_FILES += \
+    device/rockchip/rk3188/getbootmode.sh:system/bin/getbootmode.sh \
+
 #//*************************************************
 #//* add by bonovo zbiao for android box
 #//*************************************************
