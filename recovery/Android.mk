@@ -11,3 +11,4 @@ LOCAL_MODULE := librecovery_ui_$(TARGET_DEVICE)
 
 include $(BUILD_STATIC_LIBRARY)
 
+include $(CLEAR_VARS)

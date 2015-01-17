@@ -22,12 +22,16 @@ TARGET_NO_BOOTLOADER := true
 
 TARGET_NO_KERNEL ?= false
 TARGET_NO_RECOVERY ?= false
-TARGET_ROCHCHIP_RECOVERY ?= true
 TARGET_RECOVERY_UI_LIB ?= librecovery_ui_${TARGET_DEVICE}
 RECOVERY_BOARD_ID ?= false
 RECOVERY_UPDATEIMG_RSA_CHECK ?= false
+TARGET_RECOVERY_INITRC := device/rockchip/rk3188/recovery/etc/init.rc
+TARGET_RECOVERY_FSTAB := device/rockchip/rk3188/recovery/etc/recovery.fstab
 
-TARGET_PROVIDES_INIT_RC := true
+#Copy Recovery files
+PRODUCT_COPY_FILES += \
+    device/rockchip/rk3188/recovery/etc/init.bootmode.emmc.rc:recovery/root/init.bootmode.emmc.rc \
+    device/rockchip/rk3188/recovery/etc/init.bootmode.unknown.rc:recovery/root/init.bootmode.unknown.rc \
 
 BOARD_USE_LOW_MEM := false
 BOARD_USE_LCDC_COMPOSER ?= false
@@ -110,3 +114,7 @@ BOARD_WIDEVINE_OEMCRYPTO_LEVEL := 3
 
 # for tablet encryption
 BUILD_WITH_CRYPTO := false
+
+#TWRP
+DEVICE_RESOLUTION := 1024x600
+TW_NO_BATT_PERCENT := true
